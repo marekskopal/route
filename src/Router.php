@@ -28,17 +28,14 @@ class Router implements
     /**
      * @var RouteGroup[]
      */
-    protected $groups = [];
+    protected array $groups = [];
 
     /**
      * @var Route[]
      */
-    protected $namedRoutes = [];
+    protected array $namedRoutes = [];
 
-    /**
-     * @var array
-     */
-    protected $patternMatchers = [
+    protected array $patternMatchers = [
         '/{(.+?):number}/'        => '{$1:[0-9]+}',
         '/{(.+?):word}/'          => '{$1:[a-zA-Z]+}',
         '/{(.+?):alphanum_dash}/' => '{$1:[a-zA-Z0-9-_]+}',
@@ -47,26 +44,15 @@ class Router implements
     ];
 
     /**
-     * @var RouteCollector
-     */
-    protected $routeCollector;
-
-    /**
      * @var Route[]
      */
-    protected $routes = [];
+    protected array $routes = [];
 
-    /**
-     * @var bool
-     */
-    protected $routesPrepared = false;
+    protected bool $routesPrepared = false;
 
-    /**
-     * @var array
-     */
-    protected $routesData = [];
+    protected array $routesData = [];
 
-    public function __construct(?RouteCollector $routeCollector = null)
+    public function __construct(protected ?RouteCollector $routeCollector = null)
     {
         $this->routeCollector = $routeCollector ?? new RouteCollector(
             new RouteParser\Std(),
@@ -149,7 +135,7 @@ class Router implements
         $this->processGroups($request);
         $this->buildNameIndex();
 
-        $routes = array_merge(array_values($this->routes), array_values($this->namedRoutes));
+        $routes = [...array_values($this->routes), ...array_values($this->namedRoutes)];
         $options = [];
 
         /** @var Route $route */
@@ -248,7 +234,7 @@ class Router implements
             // route is not matched so exceptions are handled correctly
             if (
                 $group->getStrategy() !== null
-                && strncmp($activePath, $group->getPrefix(), strlen($group->getPrefix())) === 0
+				&& str_starts_with($activePath, $group->getPrefix())
             ) {
                 $this->setStrategy($group->getStrategy());
             }
