@@ -28,6 +28,7 @@ class Route implements
 
     protected ?RouteGroup $group = null;
 
+    /** @var array<string> */
     protected array $vars = [];
 
     public function __construct(protected string $method, protected string $path, $handler)
@@ -130,6 +131,7 @@ class Route implements
         return preg_replace(array_keys($toReplace), array_values($toReplace), '/' . implode('/', $segments));
     }
 
+    /** @return array<string> */
     public function getVars(): array
     {
         return $this->vars;
@@ -162,6 +164,7 @@ class Route implements
         return $this;
     }
 
+    /** @param array<string> */
     public function setVars(array $vars): self
     {
         $this->vars = $vars;
