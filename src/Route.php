@@ -25,6 +25,10 @@ class Route implements
 
     protected $handler;
 
+    /**
+     * @param array<string>|string $method
+     * @param array<string> $vars
+     */
     public function __construct(
         protected array|string $method,
         protected string $path,
@@ -66,6 +70,7 @@ class Route implements
         return $callable;
     }
 
+    /** @return array<string>|string */
     public function getMethod(): array|string
     {
         return $this->method;
@@ -87,6 +92,7 @@ class Route implements
         return preg_replace(array_keys($toReplace), array_values($toReplace), $this->path);
     }
 
+    /** @return array<string> */
     public function getVars(): array
     {
         return $this->vars;
@@ -119,6 +125,7 @@ class Route implements
         return $this;
     }
 
+    /** @param array<string> $vars */
     public function setVars(array $vars): self
     {
         $this->vars = $vars;
